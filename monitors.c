@@ -10,6 +10,10 @@
 #include <time.h>
 #include <semaphore.h>
 
+#define BR_CITACA 10
+#define BR_PISACA 4
+#define BR_BRISACA 2
+
 typedef struct Node{ //struct za listu
     int value;
     struct Node *next;
@@ -269,22 +273,24 @@ int main(){
     srand(time(NULL));
     initialize_monitor(&monitor);
 
-    pthread_t readers[10];
-    int reader_ids[10];
-    for (int i = 0; i < 10; i++) {
+    pthread_t readers[BR_CITACA];
+    int reader_ids[BR_CITACA];
+    for (int i = 0; i < BR_CITACA; i++) {
         reader_ids[i] = i;
         pthread_create(&readers[i], NULL, reader, (void *)&reader_ids[i]);
     }
 
-    pthread_t writers[2];
-    int writer_ids[2] = {0, 1};
-    for (int i = 0; i < 2; i++) {
+    pthread_t writers[BR_PISACA];
+    int writer_ids[BR_PISACA];
+    for (int i = 0; i < BR_PISACA; i++) {
+        writer_ids[i] = i;
         pthread_create(&writers[i], NULL, writer, (void *)&writer_ids[i]);
     }
 
-    pthread_t deleters[2];
-    int deleter_ids[2] = {0, 1};
-    for (int i = 0; i < 2; i++) {
+    pthread_t deleters[BR_BRISACA];
+    int deleter_ids[BR_BRISACA];
+    for (int i = 0; i < BR_BRISACA; i++) {
+        deleter_ids[BR_BRISACA];
         pthread_create(&deleters[i], NULL, deleter, (void *)&deleter_ids[i]);
     }
 
@@ -293,15 +299,15 @@ int main(){
         t++;
     }
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < BR_CITACA; i++) {
         pthread_join(readers[i], NULL);
     }
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < BR_PISACA; i++) {
         pthread_join(writers[i], NULL);
     }
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < BR_BRISACA; i++) {
         pthread_join(deleters[i], NULL);
     }
 
